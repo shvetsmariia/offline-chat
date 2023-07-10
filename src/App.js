@@ -13,6 +13,10 @@ export default function App() {
     userTwo: {
       name: 'Alex', 
       logo: <Avatar size="40" round={true} color={Avatar.getRandomColor('sitebase', ['red', 'green', 'hotpink'])} name="Alex" />
+    },
+    userThree: {
+      name: 'Phil', 
+      logo: <Avatar size="40" round={true} color={Avatar.getRandomColor('sitebase', ['green', 'black', 'purple'])} name="Phil" />
     }
   }; 
   
@@ -28,8 +32,18 @@ export default function App() {
   }}, []);
 
   const logoChange = () => {
-    setLogo(user === users.userOne.name ? users.userOne.logo : users.userTwo.logo); 
-  }
+    switch (user) {
+      case users.userOne.name:
+        setLogo(users.userOne.logo);
+        break;
+      case users.userTwo.name:
+        setLogo(users.userTwo.logo);
+        break;
+      default:
+        setLogo(users.userThree.logo);
+        break;
+    }
+}
 
   function sendMessage(event) {
     event.preventDefault(); 
@@ -47,7 +61,7 @@ export default function App() {
         <Row>
           {chat.map(({ logo, user, text, dateTime }, index ) => {
             return (
-            <div key={index} style={{display:"flex", alignContent:"center", marginTop:"10px"}}>
+            <div key={dateTime.toLocaleTimeString('it-IT')} style={{display:"flex", alignContent:"center", marginTop:"10px"}}>
               <span style={{display:"flex", justifyContent:"flex-start", alignItems:"center", marginRight: "20px"}}>{logo}{user + ': '}{text}</span>
               <span style={{display:"flex", alignItems:"center"}}>{`${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString()}`}</span>
             </div>
@@ -70,6 +84,7 @@ export default function App() {
             <select onChange={(event) => setUser(event.target.value)} required>
               <option value={users.userOne.name}>Frankie</option>
               <option value={users.userTwo.name}>Alex</option>
+              <option value={users.userThree.name}>Phil</option>
             </select>
             <input onChange={(event) => setText(event.target.value)} value={text} type="text" placeholder="Enter your message" required></input>
             <button type='submit' onClick={logoChange}>Send Message</button>
